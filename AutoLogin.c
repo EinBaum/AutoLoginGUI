@@ -1,4 +1,5 @@
 
+#define UNICODE
 #include <windows.h>
 #include <stdio.h>
 
@@ -31,7 +32,7 @@ typedef struct {
 HFONT defaultFont;
 WNDPROC pListProc;
 
-HWND hwnd, hwndStatic1, hwndStatic2, 
+HWND hwnd, hwndStatic1, hwndStatic2,
 	hwndPath, hwndLogin, hwndName, hwndPass,
 	hwndAdd, hwndDelete, hwndList;
 
@@ -49,7 +50,7 @@ void SendKey(PINFO info, WCHAR key)
 	ip.ki.time = 0;
 	ip.ki.dwExtraInfo = 0;
 
-	ip.ki.wVk = VkKeyScan(key);
+	ip.ki.wVk = VkKeyScanW(key);
 	ip.ki.dwFlags = 0;
 	SendInput(1, &ip, sizeof(INPUT));
 
@@ -278,7 +279,7 @@ void SaveSettings(LPWSTR iniFile, LPWSTR iniFileBak)
 	INT i;
 	USHORT numAccounts;
 	BOOL login;
-	
+
 	MoveFileExW(iniFile, iniFileBak,
 		MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH);
 
@@ -344,55 +345,55 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch(msg) {
 		case WM_CREATE:
-		
+
 			hwndStatic1 = CreateWindowW(L"static", L"WoW Path:",
 				WS_CHILD | WS_VISIBLE,
-				0, 0, 100, 20, hwnd, 0, GetModuleHandle(NULL), NULL);
+				0, 0, 100, 20, hwnd, 0, GetModuleHandleW(NULL), NULL);
 
 			hwndPath = CreateWindowW(L"edit", 0,
 				WS_CHILD | WS_BORDER | WS_VISIBLE | WS_TABSTOP,
-				100, 0, 200, 20, hwnd, (HMENU)IDC_PATH, GetModuleHandle(NULL), NULL);
+				100, 0, 200, 20, hwnd, (HMENU)IDC_PATH, GetModuleHandleW(NULL), NULL);
 
 			hwndStatic2 = CreateWindowW(L"static", L"Add Account:",
 				WS_CHILD | WS_VISIBLE,
-				0, 20, 100, 20, hwnd, 0, GetModuleHandle(NULL), NULL);
+				0, 20, 100, 20, hwnd, 0, GetModuleHandleW(NULL), NULL);
 
 			hwndName = CreateWindowW(L"edit", 0,
 				WS_CHILD | WS_BORDER | WS_VISIBLE | WS_TABSTOP,
-				100, 20, 100, 20, hwnd, (HMENU)IDC_NAME, GetModuleHandle(NULL), NULL);
+				100, 20, 100, 20, hwnd, (HMENU)IDC_NAME, GetModuleHandleW(NULL), NULL);
 
 			hwndPass = CreateWindowW(L"edit", 0,
 				WS_CHILD | WS_BORDER | WS_VISIBLE | WS_TABSTOP,
-				200, 20, 100, 20, hwnd, (HMENU)IDC_PASS, GetModuleHandle(NULL), NULL);
+				200, 20, 100, 20, hwnd, (HMENU)IDC_PASS, GetModuleHandleW(NULL), NULL);
 
 			hwndLogin = CreateWindowW(L"button", L"Login",
 				WS_CHILD | WS_VISIBLE | BS_CHECKBOX | WS_TABSTOP,
-				0, 40, 100, 20, hwnd, (HMENU)IDC_LOGIN, GetModuleHandle(NULL), NULL);
+				0, 40, 100, 20, hwnd, (HMENU)IDC_LOGIN, GetModuleHandleW(NULL), NULL);
 
 			hwndAdd = CreateWindowW(L"button", L"Add",
 				WS_CHILD | WS_VISIBLE | WS_TABSTOP,
-				100, 40, 100, 20, hwnd, (HMENU)IDC_ADD, GetModuleHandle(NULL), NULL);
+				100, 40, 100, 20, hwnd, (HMENU)IDC_ADD, GetModuleHandleW(NULL), NULL);
 
 			hwndDelete =  CreateWindowW(L"button", L"Delete",
 				WS_CHILD | WS_VISIBLE | WS_TABSTOP,
-				200, 40, 100, 20, hwnd, (HMENU)IDC_DEL, GetModuleHandle(NULL), NULL);
+				200, 40, 100, 20, hwnd, (HMENU)IDC_DEL, GetModuleHandleW(NULL), NULL);
 
 			hwndList = CreateWindowW(L"listbox", NULL,
 				WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | LBS_NOTIFY,
-				0, 60, 300, 360, hwnd, (HMENU)IDC_LIST, GetModuleHandle(NULL), NULL);
-				
+				0, 60, 300, 360, hwnd, (HMENU)IDC_LIST, GetModuleHandleW(NULL), NULL);
+
 			pListProc = (WNDPROC)SetWindowLong(hwndList, GWL_WNDPROC, (LONG)&ListProc);
-				
+
 			defaultFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
-			SendMessage(hwndStatic1,	WM_SETFONT, (WPARAM)defaultFont, TRUE);
-			SendMessage(hwndPath,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
-			SendMessage(hwndStatic2,	WM_SETFONT, (WPARAM)defaultFont, TRUE);
-			SendMessage(hwndName,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
-			SendMessage(hwndPass,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
-			SendMessage(hwndLogin,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
-			SendMessage(hwndAdd,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
-			SendMessage(hwndDelete,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
-			SendMessage(hwndList,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
+			SendMessageW(hwndStatic1,	WM_SETFONT, (WPARAM)defaultFont, TRUE);
+			SendMessageW(hwndPath,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
+			SendMessageW(hwndStatic2,	WM_SETFONT, (WPARAM)defaultFont, TRUE);
+			SendMessageW(hwndName,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
+			SendMessageW(hwndPass,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
+			SendMessageW(hwndLogin,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
+			SendMessageW(hwndAdd,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
+			SendMessageW(hwndDelete,	WM_SETFONT, (WPARAM)defaultFont, TRUE);
+			SendMessageW(hwndList,		WM_SETFONT, (WPARAM)defaultFont, TRUE);
 
 			LoadSettings(L".\\AutoLogin.ini");
 
@@ -403,7 +404,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				hwndLastFocus = GetFocus();
 			}
 			break;
-		
+
 		case WM_COMMAND:
 			switch(LOWORD(wParam)) {
 				case IDOK: {
@@ -469,8 +470,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	wc.hbrBackground	= GetSysColorBrush(COLOR_3DFACE);
 	wc.lpszMenuName		= NULL;
 	wc.lpfnWndProc		= WndProc;
-	wc.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	wc.hIcon		= LoadIcon(NULL, IDI_APPLICATION);
+	wc.hCursor		= LoadCursorW(NULL, IDC_ARROW);
+	wc.hIcon		= LoadIconW(NULL, IDI_APPLICATION);
 
 	RegisterClassW(&wc);
 	hwnd = CreateWindowW(wc.lpszClassName, L"AutoLogin",
@@ -480,10 +481,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
 	ShowWindow(hwnd, nCmdShow);
 	UpdateWindow(hwnd);
 
-	while (GetMessage(&msg, NULL, 0, 0)) {
-		if (!IsDialogMessage(hwnd, &msg)) {
+	while (GetMessageW(&msg, NULL, 0, 0)) {
+		if (!IsDialogMessageW(hwnd, &msg)) {
 			TranslateMessage(&msg);
-			DispatchMessage(&msg);
+			DispatchMessageW(&msg);
 		}
 	}
 
