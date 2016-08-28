@@ -42,40 +42,52 @@ PSLIST_HEADER pListHead;
 PSLIST_HEADER pTmpHead;
 
 
-void SendKey(PINFO info, WCHAR key)
+void AL_Key(HANDLE hWnd, WORD vk, BOOL press)
 {
 	INPUT ip;
+	ZeroMemory(&ip, sizeof(INPUT));
+
 	ip.type = INPUT_KEYBOARD;
-	ip.ki.wScan = 0;
-	ip.ki.time = 0;
-	ip.ki.dwExtraInfo = 0;
-
-	ip.ki.wVk = VkKeyScanW(key);
-	ip.ki.dwFlags = 0;
+	ip.ki.wVk = vk;
+	ip.ki.dwFlags = (press ? 0 : KEYEVENTF_KEYUP);
 	SendInput(1, &ip, sizeof(INPUT));
+}
 
-	ip.ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, &ip, sizeof(INPUT));
+void AL_SendKey(HANDLE hWnd, char key)
+{
+	WORD vk = VkKeyScan(key);
+	BOOL isUpper = IsCharUpper(key);
+
+	if (isUpper) {
+		AL_Key(hWnd, VK_LSHIFT, TRUE);
+	}
+
+	AL_Key(hWnd, vk, TRUE);
+	AL_Key(hWnd, vk, FALSE);
+
+	if (isUpper) {
+		AL_Key(hWnd, VK_LSHIFT, FALSE);
+	}
 }
 
 BOOL SendInfo(PINFO info)
 {
 	WCHAR *pKey = info->name;
 	while (*pKey != L'\0') {
-		SendKey(info, *pKey);
+		AL_SendKey(info, *pKey);
 		pKey++;
 	}
 
-	SendKey(info, L'\t');
+	AL_SendKey(info, L'\t');
 
 	pKey = info->pass;
 	while (*pKey != L'\0') {
-		SendKey(info, *pKey);
+		AL_SendKey(info, *pKey);
 		pKey++;
 	}
 
 	if (info->login) {
-		SendKey(info, L'\n');
+		AL_SendKey(info, L'\n');
 	}
 
 	return TRUE;

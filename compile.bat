@@ -1,0 +1,1 @@
+tcc -o bin/AutoLogin.exe AutoLogin.c -luser32
