@@ -158,8 +158,10 @@ DWORD WINAPI StartGame_Process(LPVOID lpParameter)
 		goto close;
 	}
 
+	Sleep(1000);
+
 	retries = 0;
-	while (SetForegroundWindow(info->hwnd) == FALSE && retries < MAX_RETRIES) {
+	while (!SetForegroundWindow(info->hwnd) && retries < MAX_RETRIES) {
 		Sleep(500);
 		++retries;
 	}
